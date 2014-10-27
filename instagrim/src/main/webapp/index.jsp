@@ -10,13 +10,20 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Instagrim</title>
+        <title>instagrim</title>
+        <style type="text/css">
+span{
+   color:blue;
+   font-size:70;
+   font-weight:bold;
+}
+</style>
         <link rel="stylesheet" type="text/css" href="Styles.css" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
         <header>
-            <h1>InstaGrim ! </h1>
+            <h1>instagrim ! </h1>
             <h2>Your world in Black and White</h2>
         </header>
         <nav>
@@ -32,21 +39,27 @@
                             if (lg.getlogedin()) {
                     %>
 
-                <li><a href="/Instagrim/Images/<%=lg.getUsername()%>">Your Images</a></li>
+                <li><a href="/instagrim/Images/<%=lg.getUsername()%>">Your Images</a></li>
+                 <li><a href="NewProfile.jsp">Profile</a>
+                 <li><a href="/instagrim/Logout">Logout</a>
                     <%}
                             }else{
                                 %>
                  <li><a href="register.jsp">Register</a></li>
                 <li><a href="login.jsp">Login</a></li>
+               
                 <%
                                         
                             
                     }%>
             </ul>
         </nav>
+       <span><%if(lg != null) %><%{ %>
+        Welcome <%=lg.getUsername() %> to instagrim!
+        <%} %></span>
         <footer>
             <ul>
-                <li class="footer"><a href="/Instagrim">Home</a></li>
+                <li class="footer"><a href="/instagrim">Home</a></li>
                 <li>&COPY; Andy C</li>
             </ul>
         </footer>

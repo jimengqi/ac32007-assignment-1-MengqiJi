@@ -11,20 +11,20 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Instagrim</title>
-        <link rel="stylesheet" type="text/css" href="/Instagrim/Styles.css" />
+        <title>instagrim</title>
+        <link rel="stylesheet" type="text/css" href="/instagrim/Styles.css" />
     </head>
     <body>
         <header>
         
-        <h1>InstaGrim ! </h1>
+        <h1>instagrim ! </h1>
         <h2>Your world in Black and White</h2>
         </header>
         
         <nav>
             <ul>
-                <li class="nav"><a href="/Instagrim/upload.jsp">Upload</a></li>
-                <li class="nav"><a href="/Instagrim/Images/majed">Sample Images</a></li>
+                <li class="nav"><a href="/instagrim/upload.jsp">Upload</a></li>
+                <li class="nav"><a href="/instagrim/Images/majed">Sample Images</a></li>
             </ul>
         </nav>
  
@@ -43,15 +43,36 @@
                 Pic p = (Pic) iterator.next();
 
         %>
-        <a href="/Instagrim/Image/<%=p.getSUUID()%>" ><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a><br/><%
-
-            }
-            }
-        %>
+        <a href="/instagrim/Image/<%=p.getSUUID()%>" ><img src="/instagrim/Thumb/<%=p.getSUUID()%>"></a><br/>
+        <a href="/instagrim/UsersPics?picidfordelete=<%=p.getSUUID() %>">Delete</a></br>
+        
+        <a href="/instagrim/AddRecord.jsp?picid=<%=p.getSUUID()%>">Go To See and Add Record</a>
+        <%-- <form method="GET" action="/instagrim/UsersPics">
+        <input type="submit" value="Delete">
+        <input type="text"   value="<%=p.getSUUID()%>"  name="picidfordelete">
+        </form> --%>
+       
+        <form method="POST" action="/instagrim/NewProfile">
+		<input type="submit" value="use as my profile"  >
+		<input type="text" value="<%=p.getSUUID()%>" name="picid">
+		</form>
+        
+       <!--  <div  align="left">
+	    <h3>Add Your Picture Story:</h3>
+		 <form method="POST" action="/instagrim/UsersPics">
+		 <input type="text" size="30" maxlength="100" value="add not more than 100 words" 
+		 style="height: 100px"  name="text" /><br> 
+	     <input type="submit" value="sendRecord" name="addrecord" />
+	    </form>  
+	    </div>  -->
+            
+            
+         <% }} %>
+       
         </article>
         <footer>
             <ul>
-                <li class="footer"><a href="/Instagrim">Home</a></li>
+                <li class="footer"><a href="/instagrim">Home</a></li>
             </ul>
         </footer>
     </body>

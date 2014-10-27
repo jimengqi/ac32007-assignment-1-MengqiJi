@@ -1,9 +1,18 @@
 package uk.ac.dundee.computing.aec.instagrim.lib;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.StringTokenizer;
+
+
+
+
+import javax.imageio.ImageIO;
 //import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
+
 import com.eaio.uuid.UUID;
 
 public final class Convertors {
@@ -19,6 +28,20 @@ public final class Convertors {
     }
     
     
+    public static BufferedImage byteArrayToBufferedImage(byte[] byteArray) {
+		BufferedImage buffImage;
+		try {
+			ByteArrayInputStream is = new ByteArrayInputStream(byteArray);
+			buffImage = ImageIO.read(is);
+			is.close();
+		} catch (IOException ioEx) {
+			System.err
+					.println("byteArrayToBufferedImage cannot read from input stream ");
+			ioEx.printStackTrace();
+			buffImage = new BufferedImage(1, 1, BufferedImage.TYPE_BYTE_BINARY);
+		}
+		return buffImage;
+	}
 
     public static byte[] asByteArray(java.util.UUID uuid) {
 

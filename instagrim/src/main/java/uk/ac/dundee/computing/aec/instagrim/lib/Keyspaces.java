@@ -47,8 +47,23 @@ public final class Keyspaces {
                     + "      first_name text,\n"
                     + "      last_name text,\n"
                     + "      email set<text>,\n"
-                    + "      addresses  map<text, frozen <address>>\n"
+                    + "      picture uuid\n"
                     + "  );";
+            String CreatePicRecords = "CREATE TABLE if not exists instagrim.picrecords (\n"
+    				+ " user varchar,\n"
+    				+ " records text,\n"
+    				+ " picid uuid,\n"
+    				+ " added_time timestamp,\n"
+    				+ " PRIMARY KEY (picid, added_time))"
+    				+ " WITH CLUSTERING ORDER BY (added_time DESC);";
+           /* String CreateNewUserProfile = "CREATE TABLE if not exists instagrim.newuserprofiles (\n"
+                    + "      username text PRIMARY KEY,\n"
+                    + "      first_name text,\n"
+                    + "      last_name text,\n"
+                    + "      email set<text>,\n"
+                    + "      picid uuid,\n"
+                    + "      interaction_time timestamp,"
+                    + "  );";*/
             Session session = c.connect();
             try {
                 PreparedStatement statement = session
@@ -86,6 +101,7 @@ public final class Keyspaces {
             } catch (Exception et) {
                 System.out.println("Can't create Address type " + et);
             }
+            
             System.out.println("" + CreateUserProfile);
             try {
                 SimpleStatement cqlQuery = new SimpleStatement(CreateUserProfile);
@@ -93,6 +109,23 @@ public final class Keyspaces {
             } catch (Exception et) {
                 System.out.println("Can't create Address Profile " + et);
             }
+            
+            System.out.println("" + CreatePicRecords);
+
+            try {
+                SimpleStatement cqlQuery = new SimpleStatement(CreatePicRecords);
+                session.execute(cqlQuery);
+            } catch (Exception et) {
+                System.out.println("Can't create record table " + et);
+            }
+          /*  System.out.println("" + CreateNewUserProfile);
+
+            try {
+                SimpleStatement cqlQuery = new SimpleStatement(CreateNewUserProfile);
+                session.execute(cqlQuery);
+            } catch (Exception et) {
+                System.out.println("Can't create new user table " + et);
+            }*/
             session.close();
 
         } catch (Exception et) {

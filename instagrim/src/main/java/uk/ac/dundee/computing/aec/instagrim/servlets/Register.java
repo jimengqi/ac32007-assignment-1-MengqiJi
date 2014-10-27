@@ -7,8 +7,13 @@
 package uk.ac.dundee.computing.aec.instagrim.servlets;
 
 import com.datastax.driver.core.Cluster;
+
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -16,6 +21,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.aec.instagrim.models.User;
 
@@ -45,14 +51,35 @@ public class Register extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String username=request.getParameter("username");
+    	Set<String> eemail= new HashSet<String>();
+    	
+    	
+    	String username=request.getParameter("username");
         String password=request.getParameter("password");
+        String firstname=request.getParameter("firstname");
+        String lastname=request.getParameter("lastname");
+        eemail.add(request.getParameter("email"));
+        String email=eemail.toString();
+        
         
         User us=new User();
         us.setCluster(cluster);
-        us.RegisterUser(username, password);
+        us.RegisterUser(username, password,firstname,lastname,email);
         
-	response.sendRedirect("/Instagrim");
+        response.sendRedirect("/instagrim");
+	//RequestDispatcher rd = request.getRequestDispatcher("register.jsp");
+	
+	//try {
+		//if (us.registerUser(username,password)) {
+			//response.sendRedirect("instagrim");
+		//} else {
+			//request.setAttribute("errorMessage", "Please try Again");
+			//rd.forward(request, response);
+		//}
+	//} catch (Throwable error) {
+		//request.setAttribute("errorMessage", error.getMessage());
+		//rd.forward(request, response);
+	//}
         
     }
 

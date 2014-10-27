@@ -6,7 +6,11 @@
 package uk.ac.dundee.computing.aec.instagrim.stores;
 
 import com.datastax.driver.core.utils.Bytes;
+
 import java.nio.ByteBuffer;
+import java.sql.Date;
+
+import uk.ac.dundee.computing.aec.instagrim.models.User;
 
 /**
  *
@@ -19,9 +23,27 @@ public class Pic {
     private String type;
     private java.util.UUID UUID=null;
     
+    private Date updated = null;
+    private User user;
+    private String filename;
+    
     public void Pic() {
 
     }
+    public User getUser(){
+       return this.user;
+    }
+    public java.util.UUID getUUID(){
+    	return this.UUID;
+    }
+    public Date getDate() {
+		return updated;
+	}
+    
+    public String getFileName(){
+		return filename;
+	}
+	
     public void setUUID(java.util.UUID UUID){
         this.UUID =UUID;
     }

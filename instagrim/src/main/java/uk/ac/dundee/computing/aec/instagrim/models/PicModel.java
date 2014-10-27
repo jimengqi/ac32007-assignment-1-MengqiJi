@@ -12,31 +12,36 @@ package uk.ac.dundee.computing.aec.instagrim.models;
  * To manually generate a UUID use:
  * http://www.famkruithof.net/uuid/uuidgen
  */
+import static org.imgscalr.Scalr.OP_ANTIALIAS;
+import static org.imgscalr.Scalr.OP_BRIGHTER;
+import static org.imgscalr.Scalr.OP_DARKER;
+import static org.imgscalr.Scalr.OP_GRAYSCALE;
+import static org.imgscalr.Scalr.pad;
+import static org.imgscalr.Scalr.resize;
+
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.Date;
+import java.util.UUID;
+
+import javax.imageio.ImageIO;
+
+import org.imgscalr.Scalr.Method;
+
+import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
+import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
+//import uk.ac.dundee.computing.aec.stores.TweetStore;
+
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
-import com.datastax.driver.core.utils.Bytes;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.util.Date;
-import java.util.LinkedList;
-import javax.imageio.ImageIO;
-import static org.imgscalr.Scalr.*;
-import org.imgscalr.Scalr.Method;
-
-import uk.ac.dundee.computing.aec.instagrim.lib.*;
-import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
-//import uk.ac.dundee.computing.aec.stores.TweetStore;
 
 public class PicModel {
 
@@ -51,7 +56,9 @@ public class PicModel {
     }
 
     public void insertPic(byte[] b, String type, String name, String user) {
-        try {
+       
+    	
+    	try {
             Convertors convertor = new Convertors();
 
             String types[]=Convertors.SplitFiletype(type);
@@ -86,6 +93,44 @@ public class PicModel {
             System.out.println("Error --> " + ex);
         }
     }
+    
+    public void deletePic(UUID picid) {
+		if (picid == null) {
+			System.err.println("Cannot delete Picture with pic is null");
+			return;
+		}
+//		if(pic.getUser().getPicId().equals(pic.getUUID())){
+//			pic.getUser().deleteUserPic();
+//		}
+		Session session = cluster.connect("instagrim");
+		PreparedStatement ps1 = session
+				.prepare("DELETE FROM pics WHERE picid=?");
+		session.execute(ps1.bind(picid));
+		
+		/*PreparedStatement ps2 = session
+				.prepare("DELETE FROM userpiclist WHERE picid=?");
+		session.execute(ps2.bind(pic.getUUID()));
+*/
+		session.close();
+	}
+
+    public static BufferedImage changeLuminance(BufferedImage buffImage,String lumi) {
+       switch (lumi) {
+		case "dark":
+			buffImage = org.imgscalr.Scalr.apply(buffImage, OP_DARKER);
+			break;
+		case "bright":
+			buffImage = org.imgscalr.Scalr.apply(buffImage, OP_BRIGHTER);
+			break;
+		}
+		return buffImage;
+	}
+   public BufferedImage manipulatePic(Pic pic, String manipulationValue) {
+	BufferedImage manipulatedBuffImg = Convertors.byteArrayToBufferedImage(pic.getBytes());
+	manipulatedBuffImg = changeLuminance(manipulatedBuffImg,manipulationValue);
+	return manipulatedBuffImg;
+
+	}
 
     public byte[] picresize(String picid,String type) {
         try {
@@ -122,7 +167,7 @@ public class PicModel {
 
     public static BufferedImage createThumbnail(BufferedImage img) {
         img = resize(img, Method.SPEED, 250, OP_ANTIALIAS, OP_GRAYSCALE);
-        // Let's add a little border before we return result.
+        // Let's add a little border before we return result., OP_GRAYSCALE
         return pad(img, 2);
     }
     
