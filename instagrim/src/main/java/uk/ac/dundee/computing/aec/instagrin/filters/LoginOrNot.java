@@ -1,4 +1,4 @@
-package uk.ac.dundee.computing.aec.instagrin.filters;
+/*package uk.ac.dundee.computing.aec.instagrin.filters;
 
 import java.io.IOException;
 
@@ -17,36 +17,37 @@ import javax.servlet.RequestDispatcher;
 
 import uk.ac.dundee.computing.aec.instagrim.servlets.Login;
 import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
-/**
+*//**
  * Servlet Filter implementation class LoginOrNot
- */
+ *//*
 @WebFilter(filterName = "LoginOrNot", urlPatterns = {"/register.jsp","/login.jsp","/Register","/Login"}, 
 dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD})
+
 public class LoginOrNot implements Filter {
 
 	 private FilterConfig filterConfig;
-    /**
+    *//**
      * Default constructor. 
-     */
+     *//*
     public LoginOrNot() {
         // TODO Auto-generated constructor stub
     }
 
-	/**
+	*//**
 	 * @see Filter#destroy()
-	 */
+	 *//*
 	public void destroy() {
 		this.filterConfig = null;
 	}
 
-	/**
+	*//**
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
-	 */
+	 *//*
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpSession session = httpRequest.getSession(false);
 		if(session != null){
-			/*LoggedIn lg = (LoggedIn) ((HttpServletRequest) request).getSession().getAttribute("LoggedIn");*/
+			LoggedIn lg = (LoggedIn) ((HttpServletRequest) request).getSession().getAttribute("LoggedIn");
 			LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
 			if(lg != null && lg.getlogedin()){
 				System.out.println("forward to index.jsp");
@@ -63,11 +64,12 @@ public class LoginOrNot implements Filter {
 		}
 	}
 
-	/**
+	*//**
 	 * @see Filter#init(FilterConfig)
-	 */
+	 *//*
 	public void init(FilterConfig fConfig) throws ServletException {
 		this.filterConfig = fConfig;
 	}
 
 }
+*/

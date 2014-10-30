@@ -44,6 +44,7 @@
 
         %>
         <a href="/instagrim/Image/<%=p.getSUUID()%>" ><img src="/instagrim/Thumb/<%=p.getSUUID()%>"></a><br/>
+        
         <a href="/instagrim/UsersPics?picidfordelete=<%=p.getSUUID() %>">Delete</a></br>
         
         <a href="/instagrim/AddRecord.jsp?picid=<%=p.getSUUID()%>">Go To See and Add Record</a>

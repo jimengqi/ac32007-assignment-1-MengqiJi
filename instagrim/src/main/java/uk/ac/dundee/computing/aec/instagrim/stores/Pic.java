@@ -54,6 +54,7 @@ public class Pic {
         this.bImage = bImage;
         this.length = length;
         this.type=type;
+        
     }
 
     public ByteBuffer getBuffer() {

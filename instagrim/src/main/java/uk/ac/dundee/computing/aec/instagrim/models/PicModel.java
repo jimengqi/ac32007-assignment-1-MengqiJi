@@ -207,6 +207,7 @@ public class PicModel {
         ByteBuffer bImage = null;
         String type = null;
         int length = 0;
+        Date date=null;
         try {
             Convertors convertor = new Convertors();
             ResultSet rs = null;
@@ -233,6 +234,7 @@ public class PicModel {
                     if (image_type == Convertors.DISPLAY_IMAGE) {
                         bImage = row.getBytes("image");
                         length = row.getInt("imagelength");
+                       
                     } else if (image_type == Convertors.DISPLAY_THUMB) {
                         bImage = row.getBytes("thumb");
                         length = row.getInt("thumblength");

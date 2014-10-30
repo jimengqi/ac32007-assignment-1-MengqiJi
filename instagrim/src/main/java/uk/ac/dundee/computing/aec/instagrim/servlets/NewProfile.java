@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -57,7 +58,8 @@ public class NewProfile extends HttpServlet {
 	    user.setCluster(CassandraHosts.getCluster());
 	    user.setProfilePic(loggedIn.getUsername(), picid);
 	    loggedIn.setPicid(UUID.fromString(picid));
-	
+	    RequestDispatcher rd=request.getRequestDispatcher("NewProfile.jsp");
+	    rd.forward(request,response);
 	}
 	
 }

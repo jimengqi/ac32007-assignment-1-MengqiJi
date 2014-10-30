@@ -1,9 +1,9 @@
 package uk.ac.dundee.computing.aec.instagrim.servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+
 import java.util.Date;
-import java.util.Iterator;
+
 import java.util.UUID;
 
 import javax.servlet.RequestDispatcher;
@@ -13,8 +13,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import javax.servlet.http.HttpSession;
 import com.datastax.driver.core.Cluster;
+import javax.servlet.ServletRequest;
 
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
@@ -45,27 +46,20 @@ public class AddRecord extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		PicRecord pic=new PicRecord();
+		/*PicRecord picrecord = (PicRecord) request.getSession().getAttribute("PicRecord");
+		//PicRecord pic=new PicRecord();
 		String picidforrecord=request.getParameter("picidid");
-		java.util.LinkedList<PicRecord> pr=pic.getRecordListFromDb(UUID.fromString(picidforrecord));
-		
+		//java.util.LinkedList<PicRecord> pr=pic.getRecordListFromDb(UUID.fromString(picidforrecord));
+		String pr=picrecord.getRecordFromDb(UUID.fromString(picidforrecord));
 		PrintWriter out=null;
-		out=new PrintWriter(response.getOutputStream());
+		out = new PrintWriter(response.getOutputStream());
 		if(pr==null){
-			out.println("No Record returns!");
+			out.println("No Record added before!");
 		}else{
-			Iterator<PicRecord> iterator;
-		    iterator=pr.iterator();
-		    while(iterator.hasNext()){
-		    	PicRecord p = (PicRecord) iterator.next();
-		    	String record=p.getText();
-		    	Date added_time=p.getAddedDate();
-		    	String user=p.getUser();
-		    	out.println(record+"</br>");
-		    	out.println("You added it in"+added_time+"</br>");
-		    	out.println("added by:"+user);
-		    }
+			
+		    	out.println(pr);
 		}
+		*/
 		    
 		
 		
@@ -75,7 +69,9 @@ public class AddRecord extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		LoggedIn loggedIn = (LoggedIn) request.getSession().getAttribute("LoggedIn");
+		//PicRecord picrecord = (PicRecord) request.getSession().getAttribute("PicRecord");
+		LoggedIn loggedIn=(LoggedIn) request.getSession().getAttribute("LoggedIn");
+		
 		String picidforrecord=request.getParameter("picidid");
 		String content = (String) request.getParameter("text");
         Date addeddate = new Date();
@@ -88,11 +84,12 @@ public class AddRecord extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		} 
-		 PicRecord record = new PicRecord(loggedIn.getUsername(),content,picid, addeddate);
-         record.setCluster(cluster);
-         record.insertRecords(loggedIn.getUsername(),content,picid, addeddate);
-         
-         RequestDispatcher rd = request.getRequestDispatcher("/UsersPics.jsp");
+		 PicRecord picrecord = new PicRecord(loggedIn.getUsername(),content,picid, addeddate);
+         picrecord.setCluster(cluster);
+         picrecord.insertRecords(loggedIn.getUsername(),content,picid, addeddate);
+         HttpSession session=request.getSession();
+         session.setAttribute("PicRecord", picrecord);
+         RequestDispatcher rd = request.getRequestDispatcher("/AddRecord.jsp");
          rd.forward(request, response);
 		
 	    }

@@ -8,6 +8,7 @@ import java.util.UUID;
 
 
 
+
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.PreparedStatement;
@@ -58,26 +59,27 @@ public class PicRecord {
 		return text;
 	}
 	
-	 public java.util.LinkedList<PicRecord> getRecordListFromDb(UUID picid){
-		LinkedList<PicRecord> picrecordList = new LinkedList<PicRecord>();
+	 public String getRecordFromDb(UUID picid){
+		//LinkedList<PicRecord> picrecordList = new LinkedList<PicRecord>();
 		
 		Session session = CassandraHosts.getCluster().connect("instagrim");
 		PreparedStatement ps = session.prepare("SELECT * FROM picrecords WHERE picid = ? ");
 		ResultSet records = session.execute(ps.bind(picid));
-		if(!records.isExhausted()){
-			for(Row record : records){
-				Date added = record.getDate("added_time");
-				String username = record.getString("user");
-				String contents = record.getString("records");
-				System.out.println(contents);
-				
-				PicRecord commentFromDB = new PicRecord(username,contents,picid, added);
-				picrecordList.add(commentFromDB);
-			}
-		}
-		session.close();
-		return picrecordList;
-	}
+		String picrecord=" ";
+		 if (records.isExhausted()) {
+	            System.out.println("No records returned");
+	            return null;
+	        } else {
+	        	
+	            for (Row row : records) {
+	             picrecord=row.getString("records");
+	               
+	            }
+	    	
+	    }
+	        session.close();
+	        return picrecord;
+}
 	
 	
 	
